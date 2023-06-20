@@ -21,11 +21,11 @@ info:
 # IMAGE CONFIGURATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> start
 defaults:
   # Favicon
-  favicon: /images/redefine-favicon.svg
+  favicon: /images/favicon.svg
   # Site logo
-  logo:
+  logo: /images/logo.svg
   # Site avatar
-  avatar: /images/redefine-avatar.svg
+  avatar: /images/avatar.svg
 # IMAGE CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end
 
 
@@ -102,8 +102,8 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image:
-    light: /images/wallhaven-wqery6-light.webp # light mode
-    dark: /images/wallhaven-wqery6-dark.webp # dark mode
+    light: /images/wall-light.webp # light mode
+    dark: /images/wall-dark.webp # dark mode
   # Home banner title
   title: A blog
   # Home banner subtitle
@@ -277,7 +277,7 @@ articles:
     # Max number of articles to display
     limit: 3
     # Placeholder image
-    placeholder: /images/wallhaven-wqery6-light.webp
+    placeholder: /images/wall-light.webp
     # Skip directory
     skip_dirs: []
 # ARTICLE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end

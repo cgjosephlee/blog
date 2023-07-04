@@ -40,7 +40,7 @@ tags:
 
 你也可以在本地build 後，手動把靜態檔案推上GitHub。這邊的目標是從build 到deploy 都用GitHub actions 完成。
 
-這個blog 的repo：https://github.com/cgjosephlee/blog。Source code 放在 `main` branch，靜態檔案放在`ph-pages` branch。
+這個blog 的repo：https://github.com/cgjosephlee/blog 。Source code 放在 `main` branch，靜態檔案放在`ph-pages` branch。
 
 以hexo 為例，在 `hexo generate` 後所產生的 `./public` 裡面就是網頁的靜態檔案，我想把這裡面的內容推到 `gh-pages` branch。之後我只要有更新post markdown file，GitHub actions 就會自動build and deploy。
 
@@ -52,9 +52,8 @@ cd repo
 npm ci  # install dependencies
 npm run build  # == hexo generate
 cd public
-# push to gh-pages branch
 # git clone ...
-# git checkout ...
+# git checkout gh-pages
 # git add ...
 # git commit ...
 # git push ...

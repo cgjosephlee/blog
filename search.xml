@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/blog/2023/06/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <title>用GitHub Actions 自動化部署blog</title>
+    <url>/blog/2023/07/03/deploy-blog-using-github-actions/</url>
+    <content><![CDATA[<p>網路上有很多怎麼用hexo, hugo 等等架blog 的教學，這邊紀錄一下如何自動化部署到 GitHub page 。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>這需要一點點基本CICD 的概念。在偵測到有新的commit 時，自動開啟一台虛擬機器，執行預先寫好的script，完成部署。這也就是GitOps。</p>
+<h1 id="如何部署"><a href="#如何部署" class="headerlink" title="如何部署"></a>如何部署</h1><p>官方教學：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site%E3%80%82">https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site。</a></p>
+<p>在repo頁面上找到settings&#x2F;pages，看到有兩種方式：</p>
+<ol>
+<li>GitHub Actions (beta)</li>
+<li>Deploy from a branch</li>
+</ol>
+<h2 id="GitHub-Actions-beta"><a href="#GitHub-Actions-beta" class="headerlink" title="GitHub Actions (beta)"></a>GitHub Actions (beta)</h2><p>第一個是自己寫GitHub Actions 將靜態檔案打包好，上傳到GitHub page。比較進階一點，適合想自己寫所有步驟的人。想自己搞的人應該都有許多經驗了，可以參考：<a href="https://github.com/adityatelange/hugo-PaperMod/blob/4a924cef54081b61530a30bd69d442ae95f16561/.github/workflows/gh-pages.yml#L66-L80%E3%80%82">https://github.com/adityatelange/hugo-PaperMod/blob/4a924cef54081b61530a30bd69d442ae95f16561/.github/workflows/gh-pages.yml#L66-L80。</a></p>
+<p>這邊需要用到2個actions：</p>
+<ul>
+<li><code>actions/upload-pages-artifact</code></li>
+<li><code>actions/deploy-pages</code></li>
+</ul>
+<p>串接在build 後面，執行打包上傳跟發佈頁面。</p>
+<h2 id="Deploy-from-a-branch"><a href="#Deploy-from-a-branch" class="headerlink" title="Deploy from a branch"></a>Deploy from a branch</h2><p>第二個是把靜態檔案推上repo，可以放在另一個branch 或是在某個子資料夾裡，這個選項GitHub會幫你執行第一個選項裡的步驟。比較簡單，而且這個方法還可以切換branch 去檢查靜態檔案，方便debug，推薦。</p>
+<p>你也可以在本地build 後，手動把靜態檔案推上GitHub。這邊的目標是從build 到deploy 都用GitHub actions 完成。</p>
+<p>這個blog 的repo：<a href="https://github.com/cgjosephlee/blog%E3%80%82Source">https://github.com/cgjosephlee/blog。Source</a> code 放在 <code>main</code> branch，靜態檔案放在<code>ph-pages</code> branch。</p>
+<p>以hexo 為例，在 <code>hexo generate</code> 後所產生的 <code>./public</code> 裡面就是網頁的靜態檔案，我想把這裡面的內容推到 <code>gh-pages</code> branch。之後我只要有更新post markdown file，GitHub actions 就會自動build and deploy。</p>
+<p>因為是在虛擬機上執行，想像在乾淨的機器上，步驟寫成script 大概是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> repo</span><br><span class="line"><span class="built_in">cd</span> repo</span><br><span class="line">npm ci  <span class="comment"># install dependencies</span></span><br><span class="line">npm run build  <span class="comment"># == hexo generate</span></span><br><span class="line"><span class="built_in">cd</span> public</span><br><span class="line"><span class="comment"># push to gh-pages branch</span></span><br><span class="line"><span class="comment"># git clone ...</span></span><br><span class="line"><span class="comment"># git checkout ...</span></span><br><span class="line"><span class="comment"># git add ...</span></span><br><span class="line"><span class="comment"># git commit ...</span></span><br><span class="line"><span class="comment"># git push ...</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>最後要推到 <code>gh-pages</code> 的步驟比較麻煩，還好有人已經寫成action 可以直接套用了。</p>
+<ul>
+<li><a href="https://github.com/peaceiris/actions-gh-pages">https://github.com/peaceiris/actions-gh-pages</a></li>
+</ul>
+<p>寫成GitHub actions yaml：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">hexo</span> <span class="string">pages</span> <span class="string">to</span> <span class="string">gh-pages</span> <span class="string">branch</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 偵測main上面的改動，可以忽略特定檔案的改動</span></span><br><span class="line"><span class="comment"># 這裡忽略了drafts, images</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span></span><br><span class="line">    <span class="attr">paths-ignore:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;source/_drafts/**&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;source/images/**&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">pages:</span>  <span class="comment"># job name</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span>  <span class="comment"># 虛擬機image</span></span><br><span class="line">    <span class="attr">permissions:</span></span><br><span class="line">      <span class="attr">contents:</span> <span class="string">write</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span>  <span class="comment"># git clone</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v3</span>  <span class="comment"># setup node env</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="number">18</span></span><br><span class="line">          <span class="attr">cache:</span> <span class="string">&#x27;npm&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">ci</span>  <span class="comment"># install dependencies</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span>  <span class="comment"># == hexo generate</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span>  <span class="comment"># push ./public to gh-pages branch</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github_token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span>  <span class="comment"># 不用修改，會自動取得token</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./public</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>設定細節可以看 <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions%E3%80%82">https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions。</a></p>
+<p>把檔案放在repo 裡的 <code>.github/workflows/deploy.yaml</code>（檔名隨意），推上GitHub 後，就完成GitHub Actions 的設定了。之後偵測到改動，GitHub 就會自動執行yaml 裡的動作，然後推到 <code>gh-pages</code> branch。在Actions tab 裡面可以看到執行的結果。</p>
+<p>部署完成後，就可以到GitHub page 看網頁囉。</p>
 ]]></content>
+      <categories>
+        <category>Development</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+      </tags>
   </entry>
 </search>

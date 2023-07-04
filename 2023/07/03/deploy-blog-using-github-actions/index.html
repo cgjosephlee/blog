@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>用GitHub Actions 自動化部署blog | Good old things</title><meta name="author" content="Joseph Lee"><meta name="copyright" content="Joseph Lee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="網路上有很多怎麼用hexo, hugo 等等架blog 的教學，這邊紀錄一下如何自動化部署到 GitHub page 。 概念這需要一點點基本CICD 的概念。在偵測到有新的commit 時，自動開啟一台虛擬機器，執行預先寫好的script，完成部署。這也就是GitOps。 如何部署官方教學：https:&#x2F;&#x2F;docs.github.com&#x2F;en&#x2F;pages&#x2F;getting-started-with">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用GitHub Actions 自動化部署blog">
+<meta property="og:url" content="https://cgjosephlee.github.io/blog/2023/07/03/deploy-blog-using-github-actions/index.html">
+<meta property="og:site_name" content="Good old things">
+<meta property="og:description" content="網路上有很多怎麼用hexo, hugo 等等架blog 的教學，這邊紀錄一下如何自動化部署到 GitHub page 。 概念這需要一點點基本CICD 的概念。在偵測到有新的commit 時，自動開啟一台虛擬機器，執行預先寫好的script，完成部署。這也就是GitOps。 如何部署官方教學：https:&#x2F;&#x2F;docs.github.com&#x2F;en&#x2F;pages&#x2F;getting-started-with">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cgjosephlee.github.io/blog/images/wall.webp">
+<meta property="article:published_time" content="2023-07-03T14:58:05.000Z">
+<meta property="article:modified_time" content="2023-07-04T05:19:48.266Z">
+<meta property="article:author" content="Joseph Lee">
+<meta property="article:tag" content="github">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cgjosephlee.github.io/blog/images/wall.webp"><link rel="shortcut icon" href="/blog/images/favicon.svg"><link rel="canonical" href="https://cgjosephlee.github.io/blog/2023/07/03/deploy-blog-using-github-actions/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blog/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"/blog/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查詢的內容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '用GitHub Actions 自動化部署blog',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-04 13:19:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/blog/images/avatar.svg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/blog/tags/"><div class="headline">標籤</div><div class="length-num">1</div></a><a href="/blog/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/blog/images/wall.webp')"><nav id="nav"><span id="blog-info"><a href="/blog/" title="Good old things"><img class="site-icon" src="/blog/images/logo.svg"/><span class="site-name">Good old things</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜尋</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">用GitHub Actions 自動化部署blog</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2023-07-03T14:58:05.000Z" title="發表於 2023-07-03 22:58:05">2023-07-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2023-07-04T05:19:48.266Z" title="更新於 2023-07-04 13:19:48">2023-07-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blog/categories/Development/">Development</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="用GitHub Actions 自動化部署blog"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>網路上有很多怎麼用hexo, hugo 等等架blog 的教學，這邊紀錄一下如何自動化部署到 GitHub page 。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>這需要一點點基本CICD 的概念。在偵測到有新的commit 時，自動開啟一台虛擬機器，執行預先寫好的script，完成部署。這也就是GitOps。</p>
+<h1 id="如何部署"><a href="#如何部署" class="headerlink" title="如何部署"></a>如何部署</h1><p>官方教學：<a target="_blank" rel="noopener" href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site%E3%80%82">https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site。</a></p>
+<p>在repo頁面上找到settings&#x2F;pages，看到有兩種方式：</p>
+<ol>
+<li>GitHub Actions (beta)</li>
+<li>Deploy from a branch</li>
+</ol>
+<h2 id="GitHub-Actions-beta"><a href="#GitHub-Actions-beta" class="headerlink" title="GitHub Actions (beta)"></a>GitHub Actions (beta)</h2><p>第一個是自己寫GitHub Actions 將靜態檔案打包好，上傳到GitHub page。比較進階一點，適合想自己寫所有步驟的人。想自己搞的人應該都有許多經驗了，可以參考：<a target="_blank" rel="noopener" href="https://github.com/adityatelange/hugo-PaperMod/blob/4a924cef54081b61530a30bd69d442ae95f16561/.github/workflows/gh-pages.yml#L66-L80%E3%80%82">https://github.com/adityatelange/hugo-PaperMod/blob/4a924cef54081b61530a30bd69d442ae95f16561/.github/workflows/gh-pages.yml#L66-L80。</a></p>
+<p>這邊需要用到2個actions：</p>
+<ul>
+<li><code>actions/upload-pages-artifact</code></li>
+<li><code>actions/deploy-pages</code></li>
+</ul>
+<p>串接在build 後面，執行打包上傳跟發佈頁面。</p>
+<h2 id="Deploy-from-a-branch"><a href="#Deploy-from-a-branch" class="headerlink" title="Deploy from a branch"></a>Deploy from a branch</h2><p>第二個是把靜態檔案推上repo，可以放在另一個branch 或是在某個子資料夾裡，這個選項GitHub會幫你執行第一個選項裡的步驟。比較簡單，而且這個方法還可以切換branch 去檢查靜態檔案，方便debug，推薦。</p>
+<p>你也可以在本地build 後，手動把靜態檔案推上GitHub。這邊的目標是從build 到deploy 都用GitHub actions 完成。</p>
+<p>這個blog 的repo：<a target="_blank" rel="noopener" href="https://github.com/cgjosephlee/blog%E3%80%82Source">https://github.com/cgjosephlee/blog。Source</a> code 放在 <code>main</code> branch，靜態檔案放在<code>ph-pages</code> branch。</p>
+<p>以hexo 為例，在 <code>hexo generate</code> 後所產生的 <code>./public</code> 裡面就是網頁的靜態檔案，我想把這裡面的內容推到 <code>gh-pages</code> branch。之後我只要有更新post markdown file，GitHub actions 就會自動build and deploy。</p>
+<p>因為是在虛擬機上執行，想像在乾淨的機器上，步驟寫成script 大概是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> repo</span><br><span class="line"><span class="built_in">cd</span> repo</span><br><span class="line">npm ci  <span class="comment"># install dependencies</span></span><br><span class="line">npm run build  <span class="comment"># == hexo generate</span></span><br><span class="line"><span class="built_in">cd</span> public</span><br><span class="line"><span class="comment"># push to gh-pages branch</span></span><br><span class="line"><span class="comment"># git clone ...</span></span><br><span class="line"><span class="comment"># git checkout ...</span></span><br><span class="line"><span class="comment"># git add ...</span></span><br><span class="line"><span class="comment"># git commit ...</span></span><br><span class="line"><span class="comment"># git push ...</span></span><br></pre></td></tr></table></figure>
+
+<p>最後要推到 <code>gh-pages</code> 的步驟比較麻煩，還好有人已經寫成action 可以直接套用了。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/peaceiris/actions-gh-pages">https://github.com/peaceiris/actions-gh-pages</a></li>
+</ul>
+<p>寫成GitHub actions yaml：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">hexo</span> <span class="string">pages</span> <span class="string">to</span> <span class="string">gh-pages</span> <span class="string">branch</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 偵測main上面的改動，可以忽略特定檔案的改動</span></span><br><span class="line"><span class="comment"># 這裡忽略了drafts, images</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span></span><br><span class="line">    <span class="attr">paths-ignore:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;source/_drafts/**&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;source/images/**&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">pages:</span>  <span class="comment"># job name</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span>  <span class="comment"># 虛擬機image</span></span><br><span class="line">    <span class="attr">permissions:</span></span><br><span class="line">      <span class="attr">contents:</span> <span class="string">write</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span>  <span class="comment"># git clone</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v3</span>  <span class="comment"># setup node env</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="number">18</span></span><br><span class="line">          <span class="attr">cache:</span> <span class="string">&#x27;npm&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">ci</span>  <span class="comment"># install dependencies</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span>  <span class="comment"># == hexo generate</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span>  <span class="comment"># push ./public to gh-pages branch</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github_token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span>  <span class="comment"># 不用修改，會自動取得token</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./public</span></span><br></pre></td></tr></table></figure>
+
+<p>設定細節可以看 <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions%E3%80%82">https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions。</a></p>
+<p>把檔案放在repo 裡的 <code>.github/workflows/deploy.yaml</code>（檔名隨意），推上GitHub 後，就完成GitHub Actions 的設定了。之後偵測到改動，GitHub 就會自動執行yaml 裡的動作，然後推到 <code>gh-pages</code> branch。在Actions tab 裡面可以看到執行的結果。</p>
+<p>部署完成後，就可以到GitHub page 看網頁囉。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgjosephlee.github.io/blog">Joseph Lee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://cgjosephlee.github.io/blog/2023/07/03/deploy-blog-using-github-actions/">https://cgjosephlee.github.io/blog/2023/07/03/deploy-blog-using-github-actions/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://cgjosephlee.github.io/blog" target="_blank">Good old things</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/github/">github</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 評論</span></div></div><div class="comment-wrap"><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">如何部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-Actions-beta"><span class="toc-number">2.1.</span> <span class="toc-text">GitHub Actions (beta)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deploy-from-a-branch"><span class="toc-number">2.2.</span> <span class="toc-text">Deploy from a branch</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('/blog/images/wall.webp')"><div id="footer-wrap"><div class="copyright">&copy;2023 By Joseph Lee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直達評論"><i class="fas fa-comments"></i></a><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到頂部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blog/js/utils.js"></script><script src="/blog/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadUtterances () {
+  let ele = document.createElement('script')
+  ele.setAttribute('id', 'utterances_comment')
+  ele.setAttribute('src', 'https://utteranc.es/client.js')
+  ele.setAttribute('repo', 'cgjosephlee/blog')
+  ele.setAttribute('issue-term', 'pathname')
+  let nowTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'photon-dark' : 'github-light'
+  ele.setAttribute('theme', nowTheme)
+  ele.setAttribute('crossorigin', 'anonymous')
+  ele.setAttribute('async', 'true')
+  document.getElementById('utterances-wrap').insertAdjacentElement('afterbegin',ele)
+}
+
+function utterancesTheme (theme) {
+  const iframe = document.querySelector('.utterances-frame')
+  if (iframe) {
+    const theme = theme === 'dark' ? 'photon-dark' : 'github-light'
+    const message = {
+      type: 'set-theme',
+      theme: theme
+    };
+    iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+}
+
+btf.addModeChange('utterances', utterancesTheme)
+
+if ('Utterances' === 'Utterances' || !true) {
+  if (true) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+  else loadUtterances()
+} else {
+  function loadOtherComment () {
+    loadUtterances()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜尋</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  資料庫載入中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜尋文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blog/js/search/local-search.js"></script></div></div></body></html>

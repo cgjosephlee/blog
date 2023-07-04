@@ -1,6 +1,6 @@
 ---
 layout: page
-title: categories
+title: Categories
 date: 2023-06-21 10:31:00
-tags:
+type: categories
 ---

@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Apple 鍵盤的Fn/Globe key | Good old things</title><meta name="author" content="Joseph Lee"><meta name="copyright" content="Joseph Lee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前陣子買了Keychron K3 Pro 在家裡使用，結果遇到F3, F4 失效了。研究了一下才發現是karabiner 的原因，但我太依賴karabiner 了無法不用，只好想其他的解決辦法。研究的過程發現Apple 鍵盤或macbook 上的Fn 跟一般鍵盤的Fn 好像不太一樣，這邊紀錄一下。 一般Fn key 不會送出keycode。 通常是切換鍵盤的layer，達到送出不同的keycode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apple 鍵盤的Fn&#x2F;Globe key">
+<meta property="og:url" content="https://cgjosephlee.github.io/blog/2023/07/04/apple-fn-key/index.html">
+<meta property="og:site_name" content="Good old things">
+<meta property="og:description" content="前陣子買了Keychron K3 Pro 在家裡使用，結果遇到F3, F4 失效了。研究了一下才發現是karabiner 的原因，但我太依賴karabiner 了無法不用，只好想其他的解決辦法。研究的過程發現Apple 鍵盤或macbook 上的Fn 跟一般鍵盤的Fn 好像不太一樣，這邊紀錄一下。 一般Fn key 不會送出keycode。 通常是切換鍵盤的layer，達到送出不同的keycode">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cgjosephlee.github.io/blog/images/wall.webp">
+<meta property="article:published_time" content="2023-07-04T14:52:06.000Z">
+<meta property="article:modified_time" content="2023-07-05T04:59:30.131Z">
+<meta property="article:author" content="Joseph Lee">
+<meta property="article:tag" content="keyboard">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cgjosephlee.github.io/blog/images/wall.webp"><link rel="shortcut icon" href="/blog/images/favicon.svg"><link rel="canonical" href="https://cgjosephlee.github.io/blog/2023/07/04/apple-fn-key/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blog/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"/blog/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查詢的內容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Apple 鍵盤的Fn/Globe key',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-05 12:59:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/blog/images/avatar.svg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/blog/tags/"><div class="headline">標籤</div><div class="length-num">2</div></a><a href="/blog/categories/"><div class="headline">分類</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/blog/images/wall.webp')"><nav id="nav"><span id="blog-info"><a href="/blog/" title="Good old things"><img class="site-icon" src="/blog/images/logo.svg"/><span class="site-name">Good old things</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜尋</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Apple 鍵盤的Fn/Globe key</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2023-07-04T14:52:06.000Z" title="發表於 2023-07-04 22:52:06">2023-07-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2023-07-05T04:59:30.131Z" title="更新於 2023-07-05 12:59:30">2023-07-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blog/categories/Accessories/">Accessories</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Apple 鍵盤的Fn/Globe key"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>前陣子買了Keychron K3 Pro 在家裡使用，結果遇到F3, F4 失效了。研究了一下才發現是karabiner 的原因，但我太依賴karabiner 了無法不用，只好想其他的解決辦法。研究的過程發現Apple 鍵盤或macbook 上的<code>Fn</code> 跟一般鍵盤的<code>Fn</code> 好像不太一樣，這邊紀錄一下。</p>
+<h1 id="一般Fn-key"><a href="#一般Fn-key" class="headerlink" title="一般Fn key"></a>一般Fn key</h1><ul>
+<li>不會送出keycode。</li>
+<li>通常是切換鍵盤的layer，達到送出不同的keycode。</li>
+<li>功能燒在鍵盤韌體上。</li>
+</ul>
+<h1 id="Apple-Fn-x2F-Globe🌐-key-apple-fn"><a href="#Apple-Fn-x2F-Globe🌐-key-apple-fn" class="headerlink" title="Apple Fn&#x2F;Globe🌐 key (apple_fn)"></a>Apple Fn&#x2F;Globe🌐 key (<code>apple_fn</code>)</h1><ul>
+<li>是一個有keycode 的按鍵。 <code>&#123;&quot;apple_vendor_top_case_key_code&quot;: &quot;keyboard_fn&quot;&#125;</code></li>
+<li>不是切換layer，比較像是control 這種控制鍵 modifier。</li>
+<li>只有特定VID&#x2F;PID 的鍵盤（&#x3D; 原廠鍵盤）送出的<code>apple_fn</code>，macOS 才認可（不愧是Apple）。</li>
+</ul>
+<h1 id="Keychron-K3-Pro"><a href="#Keychron-K3-Pro" class="headerlink" title="Keychron K3 Pro"></a>Keychron K3 Pro</h1><ul>
+<li>win&#x2F;mac mode 其實只是切換不同layer。mac (0), mac fn (1), win (2), win fn (3)，只有四層。</li>
+<li>mission control (F3) 與launchpad (F4) 其實沒有送出keycode，是用某種方式模擬？或是Event Viewer 認不得？</li>
+<li>因為沒有keycode，在經過karabiner 攔截後就失效了，想改都沒的改。</li>
+<li>用VIA 修改：F3 → <code>C(KC_UP)</code>，F4 → <code>HYPR(KC_SPC)</code>，模擬組合鍵 (<a target="_blank" rel="noopener" href="https://docs.qmk.fm/#/feature_advanced_keycodes?id=modifier-keys">ref</a>)。需額外修改開啟launchpad 的熱鍵為 <code>cmd+opt+ctrl+shift+space</code>。</li>
+<li>K7 的fn2 好像可以用apple_fn？</li>
+</ul>
+<h1 id="Niz-mini84"><a href="#Niz-mini84" class="headerlink" title="Niz mini84"></a>Niz mini84</h1><ul>
+<li>mac mode 下有兩個Fn key，Fn +  fn。</li>
+<li>win&#x2F;mac mode 連VID&#x2F;PID 都不一樣。</li>
+<li>mac mode 用了某個Apple 原廠鍵盤的VID&#x2F;PID 0x05ac&#x2F;0x0220 (<a target="_blank" rel="noopener" href="https://devicehunt.com/view/type/usb/vendor/05AC/device/0220">link</a>，不怕被吉嗎？)，所以可以送出<code>apple_fn</code>。</li>
+<li>win mode 下VID&#x2F;PID 是 0x0438&#x2F;0x5235，是AMD…? (<a target="_blank" rel="noopener" href="https://devicehunt.com/search/type/usb/vendor/0438/device/any">link</a>)</li>
+</ul>
+<h1 id="Karabiner-Elements"><a href="#Karabiner-Elements" class="headerlink" title="Karabiner Elements"></a>Karabiner Elements</h1><ul>
+<li>用虛擬鍵盤攔截實體鍵盤的keycode，修改後再送給OS。</li>
+<li>如果有經過karabiner，則VID&#x2F;PID 錯誤的<code>apple_fn</code> keycode 也可以正常觸發 (<a target="_blank" rel="noopener" href="https://github.com/qmk/qmk_firmware/pull/20643#issuecomment-1529263497">ref</a>)。</li>
+</ul>
+<h1 id="QMK"><a href="#QMK" class="headerlink" title="QMK"></a>QMK</h1><ul>
+<li>2023.02，新增了mission control (KC_MCTL) 與 launchpad (KC_LPAD) 的keycode (<a target="_blank" rel="noopener" href="https://github.com/qmk/qmk_firmware/blob/master/data/constants/keycodes/keycodes_0.0.2_basic.hjson">ref</a>)。</li>
+<li>因為<code>apple_fn</code> 限制VID&#x2F;PID，所以QMK 無法使用這個keycode (<a target="_blank" rel="noopener" href="https://github.com/qmk/qmk_firmware/pull/20643">ref</a>)。</li>
+<li>但還是有辦法改，參考 <a target="_blank" rel="noopener" href="https://gist.github.com/fauxpark/010dcf5d6377c3a71ac98ce37414c6c4">ref</a>。</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://sspai.com/post/79608">https://sspai.com/post/79608</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgjosephlee.github.io/blog">Joseph Lee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://cgjosephlee.github.io/blog/2023/07/04/apple-fn-key/">https://cgjosephlee.github.io/blog/2023/07/04/apple-fn-key/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://cgjosephlee.github.io/blog" target="_blank">Good old things</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/keyboard/">keyboard</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/blog/2023/07/03/deploy-blog-using-github-actions/" title="用GitHub Actions 自動化部署blog"><img class="cover" src="/blog/images/wall.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">用GitHub Actions 自動化部署blog</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 評論</span></div></div><div class="comment-wrap"><div><div id="utterances-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E8%88%ACFn-key"><span class="toc-number">1.</span> <span class="toc-text">一般Fn key</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apple-Fn-x2F-Globe%F0%9F%8C%90-key-apple-fn"><span class="toc-number">2.</span> <span class="toc-text">Apple Fn&#x2F;Globe🌐 key (apple_fn)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Keychron-K3-Pro"><span class="toc-number">3.</span> <span class="toc-text">Keychron K3 Pro</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Niz-mini84"><span class="toc-number">4.</span> <span class="toc-text">Niz mini84</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Karabiner-Elements"><span class="toc-number">5.</span> <span class="toc-text">Karabiner Elements</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#QMK"><span class="toc-number">6.</span> <span class="toc-text">QMK</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('/blog/images/wall.webp')"><div id="footer-wrap"><div class="copyright">&copy;2023 By Joseph Lee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直達評論"><i class="fas fa-comments"></i></a><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到頂部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blog/js/utils.js"></script><script src="/blog/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadUtterances () {
+  let ele = document.createElement('script')
+  ele.setAttribute('id', 'utterances_comment')
+  ele.setAttribute('src', 'https://utteranc.es/client.js')
+  ele.setAttribute('repo', 'cgjosephlee/blog')
+  ele.setAttribute('issue-term', 'pathname')
+  let nowTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'photon-dark' : 'github-light'
+  ele.setAttribute('theme', nowTheme)
+  ele.setAttribute('crossorigin', 'anonymous')
+  ele.setAttribute('async', 'true')
+  document.getElementById('utterances-wrap').insertAdjacentElement('afterbegin',ele)
+}
+
+function utterancesTheme (theme) {
+  const iframe = document.querySelector('.utterances-frame')
+  if (iframe) {
+    const theme = theme === 'dark' ? 'photon-dark' : 'github-light'
+    const message = {
+      type: 'set-theme',
+      theme: theme
+    };
+    iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+  }
+}
+
+btf.addModeChange('utterances', utterancesTheme)
+
+if ('Utterances' === 'Utterances' || !true) {
+  if (true) btf.loadComment(document.getElementById('utterances-wrap'), loadUtterances)
+  else loadUtterances()
+} else {
+  function loadOtherComment () {
+    loadUtterances()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜尋</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  資料庫載入中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜尋文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/blog/js/search/local-search.js"></script></div></div></body></html>
